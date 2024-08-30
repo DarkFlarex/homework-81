@@ -1,3 +1,9 @@
+import express from 'express';
+import mongoose from 'mongoose';
+import {LinkMutation} from "../types";
+import Link from "../models/Link";
+
+const linksRouter = express.Router();
 
 const createRandomId = () => {
   let random_id = '';
@@ -9,4 +15,36 @@ const createRandomId = () => {
   return random_id;
 }
 
+linksRouter.post('/', async (req, res,next) => {
+  try {
+    const { originalUrl} = req.body;
+    console.log('Received originalUrl:', originalUrl);
+    if (!originalUrl) {
+      return res.status(400).send({ error: 'originalUrl is required!' });
+    }
 
+    let shortUrl;
+    do {
+      shortUrl = createRandomId();
+      const link = await Link.findOne({ shortUrl });
+      if (!link) break;
+    } while (true);
+
+    const linkMutation: LinkMutation = {
+      originalUrl,
+      shortUrl,
+    };
+
+    const link = new Link (linkMutation);
+    await link.save();
+
+    return res.send(link);
+  } catch (error){
+    if (error instanceof mongoose.Error.ValidationError){
+      return res.status(400).send(error);
+    }
+    return next(error);
+  }
+});
+
+export default linksRouter;
