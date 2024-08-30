@@ -5,6 +5,22 @@ import Link from "../models/Link";
 
 const linksRouter = express.Router();
 
+linksRouter.get('/info/:shortUrl', async (req, res, next) => {
+  try {
+    const { shortUrl } = req.params;
+
+    const link = await Link.findOne({ shortUrl });
+
+    if (!link) {
+      return res.status(404).send({ error: 'Link info not found!' });
+    }
+
+    return res.send(link);
+  } catch (error) {
+    return next(error);
+  }
+});
+
 const createRandomId = () => {
   let random_id = '';
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
