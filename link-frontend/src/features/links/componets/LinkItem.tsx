@@ -11,7 +11,7 @@ const LinkItem: React.FC<Props> = ({link}) => {
 
     return (
         <Grid>
-            <Link href={fullUrl}>
+            <Link href={fullUrl} target="_blank">
                 {fullUrl}
             </Link>
         </Grid>
