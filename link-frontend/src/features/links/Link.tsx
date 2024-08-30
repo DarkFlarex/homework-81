@@ -1,14 +1,16 @@
 import React from 'react';
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { selectLinkCreating} from "./LinksSlice";
+import {selectLink, selectLinkCreating} from "./LinksSlice";
 import { createLink } from "./LinksThunks";
-import { Grid, Typography  } from "@mui/material";
+import { Grid, Typography, CircularProgress  } from "@mui/material";
 import LinkForm from "./componets/LinkForm";
 import { LinkMutation } from "../../types";
+import LinkItem from "./componets/LinkItem";
 
 const Link: React.FC = () => {
     const dispatch = useAppDispatch();
     const isCreating = useAppSelector(selectLinkCreating);
+    const link  = useAppSelector(selectLink);
 
     const onFormSubmit = async (linkMutation: LinkMutation) => {
         try {
@@ -27,6 +29,21 @@ const Link: React.FC = () => {
             <Grid item>
                 <LinkForm onSubmit={onFormSubmit} isLoading={isCreating} />
             </Grid>
+
+            {isCreating ? (
+                <Grid item>
+                    <CircularProgress />
+                </Grid>
+            ) : (
+                link && (
+                    <Grid item>
+                        <Typography variant="h6">
+                            Your shortened link:
+                        </Typography>
+                        <LinkItem link={link}/>
+                    </Grid>
+                )
+            )}
         </Grid>
     );
 };
