@@ -21,6 +21,28 @@ linksRouter.get('/info/:shortUrl', async (req, res, next) => {
   }
 });
 
+linksRouter.get('/:shortUrl', async (req, res, next) => {
+  try {
+    const { shortUrl } = req.params;
+
+    const link = await Link.findOne({ shortUrl });
+
+    if (!link) {
+      return res.status(404).send({ error: 'Link shortUrl not found!' });
+    }
+
+    return res.redirect(link.originalUrl);
+  } catch (error) {
+    return next(error);
+  }
+});
+
+// app.get('/my-link/:id',(req,res)=>{
+//   const id = req.params.id;
+//   //find your link in database by id
+//   return res.status(301).redirect('https://youtube.com');
+// });
+
 const createRandomId = () => {
   let random_id = '';
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
