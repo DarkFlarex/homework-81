@@ -37,12 +37,6 @@ linksRouter.get('/:shortUrl', async (req, res, next) => {
   }
 });
 
-// app.get('/my-link/:id',(req,res)=>{
-//   const id = req.params.id;
-//   //find your link in database by id
-//   return res.status(301).redirect('https://youtube.com');
-// });
-
 const createRandomId = () => {
   let random_id = '';
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
